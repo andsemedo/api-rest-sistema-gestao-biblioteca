@@ -12,14 +12,14 @@ public class LivroModel {
     private Long id;
     private String titulo;
     private String autor;
-    private int ano_publicacao;
+    private Integer ano_publicacao;
     private String isbn;
     private Disponibilidade disponibilidade;
 
     public LivroModel() {
     }
 
-    public LivroModel(String titulo, String autor, int ano_publicacao, String isbn, Disponibilidade disponibilidade) {
+    public LivroModel(String titulo, String autor, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade) {
         this.titulo = titulo;
         this.autor = autor;
         this.ano_publicacao = ano_publicacao;
@@ -27,7 +27,7 @@ public class LivroModel {
         this.disponibilidade = disponibilidade;
     }
 
-    public LivroModel(Long id, String titulo, String autor, int ano_publicacao, String isbn, Disponibilidade disponibilidade) {
+    public LivroModel(Long id, String titulo, String autor, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -60,11 +60,11 @@ public class LivroModel {
         this.autor = autor;
     }
 
-    public int getAno_publicacao() {
+    public Integer getAno_publicacao() {
         return ano_publicacao;
     }
 
-    public void setAno_publicacao(int ano_publicacao) {
+    public void setAno_publicacao(Integer ano_publicacao) {
         this.ano_publicacao = ano_publicacao;
     }
 
