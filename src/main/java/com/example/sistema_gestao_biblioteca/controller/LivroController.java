@@ -23,7 +23,11 @@ public class LivroController {
     @Autowired
     LivroRepository livroRepository;
 
-    
+    @Operation(description = "endpoint para adicionar um livro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "retorna o livro adicionado"),
+            @ApiResponse(responseCode = "500", description = "Já existe um livro inserido com este ISBN")
+    })
     @PostMapping("/livros")
     public ResponseEntity<Object> adicionarNovoLivro(@RequestBody @Valid LivroDTO livroDTO) {
         try {
@@ -36,14 +40,26 @@ public class LivroController {
 
     }
 
+    @Operation(description = "endpoint para retornar todos os livros")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "retorna uma lista de livros"),
+            @ApiResponse(responseCode = "404", description = "Nenhum livro encontrado")
+    })
     @GetMapping("/livros")
-    public ResponseEntity<List<LivroModel>> listarLivros() {
+    public ResponseEntity<Object> listarLivros() {
         List<LivroModel> livroModelList = livroRepository.findAll();
 
+        if (livroModelList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum livro encontrado");
+        }
         return ResponseEntity.status(HttpStatus.OK).body(livroModelList);
     }
 
-    // metodo para procurar livro pelo id
+    @Operation(description = "endpoint para procurar um livro pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "retorna o livro procurado"),
+            @ApiResponse(responseCode = "404", description = "Livro não encontrado")
+    })
     @GetMapping("/livros/{id}")
     public ResponseEntity<Object> obterLivrosById(@PathVariable(value = "id") Long id) {
         Optional<LivroModel> livroOptional = livroRepository.findById(id);
@@ -53,7 +69,12 @@ public class LivroController {
 
         return ResponseEntity.status(HttpStatus.OK).body(livroOptional.get());
     }
-
+    @Operation(description = "endpoint para atualizar um livro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "retorna o livro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Livro não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Já existe um livro inserido com este ISBN")
+    })
     @PutMapping("/livros/{id}")
     public ResponseEntity<Object> atualizarLivro(@PathVariable(value = "id") Long id, @RequestBody @Valid LivroDTO livroDTO) {
         Optional<LivroModel> livroModelOptional = livroRepository.findById(id);
@@ -72,6 +93,11 @@ public class LivroController {
 
     }
 
+    @Operation(description = "endpoint para remover um livro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Livro removido com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Livro não encontrado")
+    })
     @DeleteMapping("/livros/{id}")
     public ResponseEntity<Object> removerLivro(@PathVariable(value = "id") Long id) {
         Optional<LivroModel> livroModelOptional = livroRepository.findById(id);
