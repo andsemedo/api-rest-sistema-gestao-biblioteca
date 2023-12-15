@@ -4,7 +4,7 @@ import com.example.sistema_gestao_biblioteca.enums.Disponibilidade;
 import jakarta.persistence.*;
 
 @Entity
-@Table
+@Table(name = "livro")
 public class LivroModel {
 
     @Id
@@ -13,6 +13,7 @@ public class LivroModel {
     private String titulo;
     private String autor;
     private Integer ano_publicacao;
+    @Column(unique = true)
     private String isbn;
     private Disponibilidade disponibilidade;
 
