@@ -4,6 +4,7 @@ import com.example.sistema_gestao_biblioteca.dto.LivroDTO;
 import com.example.sistema_gestao_biblioteca.models.AutorModel;
 import com.example.sistema_gestao_biblioteca.models.LivroModel;
 import com.example.sistema_gestao_biblioteca.repositories.AutorRepository;
+import com.example.sistema_gestao_biblioteca.responses.AutorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class AutorController {
@@ -49,7 +51,17 @@ public class AutorController {
         if (autorModelList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum autor encontrado");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(autorModelList);
+
+        List<AutorResponse> autorResponsesList = autorModelList.stream()
+                .map(autor -> {
+                    AutorResponse response = new AutorResponse();
+                    response.setId(autor.getId());
+                    response.setNome(autor.getNome());
+                    response.setListaLivros(autor.getListaLivros());
+                    return response;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(autorResponsesList);
     }
 
     @Operation(description = "endpoint para procurar um autor pelo id")
@@ -64,7 +76,16 @@ public class AutorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Autor não encontrado");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(optionalAutorModel.get());
+        List<AutorResponse> autorResponsesList = optionalAutorModel.stream()
+                .map(autor -> {
+                    AutorResponse response = new AutorResponse();
+                    response.setId(autor.getId());
+                    response.setNome(autor.getNome());
+                    response.setListaLivros(autor.getListaLivros());
+                    return response;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(autorResponsesList);
     }
 
     @Operation(description = "endpoint para atualizar um autor")

@@ -1,37 +1,32 @@
 version: '3.8'
 services:
- db:
-  container_name: rest_postgres
+ postgresqldb:
+  container_name: postgresdb
   image: postgres:latest
+  ports:
+   - "5432:5432"
   environment:
-   POSTGRES_DB: biblioteca 
-   POSTGRES_USER: anderson_u
-   POSTGRES_PASSWORD: semedo_p
+   POSTGRES_DB: biblioteca
+   POSTGRES_USER: postgres
+   POSTGRES_PASSWORD: postgres
   volumes:
    - postgres_data:/var/lib/postgresql/postgres_data
-  ports:
-   - "5437:5432"
-  restart: always
-  networks:
-   - rest_network
 
- pgadmin:
-  container_name: rest_pgadmin
-  image: dpage/pgadmin4
-  environment:
-   PGADMIN_DEFAULT_EMAIL: admin@admin.com
-   PGADMIN_DEFAULT_PASSWORD: admin
+ app:
+  container_name: app
+  image: anderson-biblioteca:1.0.0
+  build:
+   context: .
+   dockerfile: Dockerfile
   ports:
-   - "8172:80"
+   - "8080:8080"
   depends_on:
-   - db
-  restart: on-failure
-  networks:
-   - rest_network
+   -  postgresqldb
 
 volumes:
  postgres_data:
 
-networks:
- rest_network:
-  driver: bridge
+
+##networks:
+ ##app_network:
+  ##driver: bridge

@@ -5,6 +5,8 @@ import com.example.sistema_gestao_biblioteca.models.AutorModel;
 import com.example.sistema_gestao_biblioteca.models.LivroModel;
 import com.example.sistema_gestao_biblioteca.repositories.AutorRepository;
 import com.example.sistema_gestao_biblioteca.repositories.LivroRepository;
+import com.example.sistema_gestao_biblioteca.responses.AutorResponse;
+import com.example.sistema_gestao_biblioteca.responses.LivroResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,6 +26,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class LivroController {
@@ -74,7 +77,26 @@ public class LivroController {
         if (livroModelList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum livro encontrado");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(livroModelList);
+
+        List<LivroResponse> livroResponseList = livroModelList.stream()
+                .map(livro -> {
+                    LivroResponse response = new LivroResponse();
+                    response.setId(livro.getId());
+                    response.setTitulo(livro.getTitulo());
+                    response.setAno_publicacao(livro.getAno_publicacao());
+                    response.setIsbn(livro.getIsbn());
+                    response.setDisponibilidade(livro.getDisponibilidade());
+
+                    AutorResponse autorResponse = new AutorResponse();
+                    autorResponse.setId(livro.getAutor().getId());
+                    autorResponse.setNome(livro.getAutor().getNome());
+
+                    response.setAutor(autorResponse);
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(livroResponseList);
     }
 
     @Operation(description = "endpoint para procurar um livro pelo id")
@@ -89,7 +111,25 @@ public class LivroController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Livro não encontrado");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(livroOptional.get());
+        List<LivroResponse> livroResponseList = livroOptional.stream()
+                .map(livro -> {
+                    LivroResponse response = new LivroResponse();
+                    response.setId(livro.getId());
+                    response.setTitulo(livro.getTitulo());
+                    response.setAno_publicacao(livro.getAno_publicacao());
+                    response.setIsbn(livro.getIsbn());
+                    response.setDisponibilidade(livro.getDisponibilidade());
+
+                    AutorResponse autorResponse = new AutorResponse();
+                    autorResponse.setId(livro.getAutor().getId());
+                    autorResponse.setNome(livro.getAutor().getNome());
+
+                    response.setAutor(autorResponse);
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(livroResponseList);
     }
     @Operation(description = "endpoint para atualizar um livro")
     @ApiResponses(value = {

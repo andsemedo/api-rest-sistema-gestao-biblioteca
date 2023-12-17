@@ -1,31 +1,21 @@
-package com.example.sistema_gestao_biblioteca.models;
+package com.example.sistema_gestao_biblioteca.responses;
 
 import com.example.sistema_gestao_biblioteca.enums.Disponibilidade;
-import com.fasterxml.jackson.annotation.*;
-import jakarta.persistence.*;
+import com.example.sistema_gestao_biblioteca.models.AutorModel;
 
-@Entity
-@Table(name = "livro")
-public class LivroModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class LivroResponse {
     private Long id;
     private String titulo;
     private Integer ano_publicacao;
-    @Column(unique = true)
     private String isbn;
     private Disponibilidade disponibilidade;
+    private AutorResponse autor;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "autor_id")
-    @JsonIgnoreProperties("listaLivros")
-    private AutorModel autor;
-
-    public LivroModel() {
+    public LivroResponse() {
     }
 
-    public LivroModel(String titulo, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade, AutorModel autor) {
+    public LivroResponse(Long id, String titulo, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade, AutorResponse autor) {
+        this.id = id;
         this.titulo = titulo;
         this.ano_publicacao = ano_publicacao;
         this.isbn = isbn;
@@ -33,8 +23,7 @@ public class LivroModel {
         this.autor = autor;
     }
 
-    public LivroModel(Long id, String titulo, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade, AutorModel autor) {
-        this.id = id;
+    public LivroResponse(String titulo, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade, AutorResponse autor) {
         this.titulo = titulo;
         this.ano_publicacao = ano_publicacao;
         this.isbn = isbn;
@@ -82,11 +71,11 @@ public class LivroModel {
         this.disponibilidade = disponibilidade;
     }
 
-    public AutorModel getAutor() {
+    public AutorResponse getAutor() {
         return autor;
     }
 
-    public void setAutor(AutorModel autor) {
+    public void setAutor(AutorResponse autor) {
         this.autor = autor;
     }
 }

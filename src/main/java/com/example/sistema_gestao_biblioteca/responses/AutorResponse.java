@@ -1,35 +1,27 @@
-package com.example.sistema_gestao_biblioteca.models;
+package com.example.sistema_gestao_biblioteca.responses;
 
-import com.fasterxml.jackson.annotation.*;
-import jakarta.persistence.*;
+import com.example.sistema_gestao_biblioteca.models.LivroModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "autor")
-public class AutorModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AutorResponse {
     private Long id;
-    @Column(nullable = false)
     private String nome;
-
-    @OneToMany(mappedBy = "autor")
-    @JsonIgnoreProperties("autor")
     private List<LivroModel> listaLivros = new ArrayList<LivroModel>();
 
-    public AutorModel() {
+    public AutorResponse() {
     }
 
-    public AutorModel(Long id, String nome) {
+    public AutorResponse(String nome, List<LivroModel> listaLivros) {
+        this.nome = nome;
+        this.listaLivros = listaLivros;
+    }
+
+    public AutorResponse(Long id, String nome, List<LivroModel> listaLivros) {
         this.id = id;
         this.nome = nome;
-    }
-
-    public AutorModel(String nome) {
-        this.nome = nome;
+        this.listaLivros = listaLivros;
     }
 
     public Long getId() {
