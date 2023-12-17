@@ -1,40 +1,47 @@
 package com.example.sistema_gestao_biblioteca.models;
 
 import com.example.sistema_gestao_biblioteca.enums.Disponibilidade;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "livro")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class LivroModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
-    private String autor;
     private Integer ano_publicacao;
     @Column(unique = true)
     private String isbn;
     private Disponibilidade disponibilidade;
 
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private AutorModel autor;
+
     public LivroModel() {
     }
 
-    public LivroModel(String titulo, String autor, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade) {
+    public LivroModel(String titulo, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade, AutorModel autor) {
         this.titulo = titulo;
-        this.autor = autor;
         this.ano_publicacao = ano_publicacao;
         this.isbn = isbn;
         this.disponibilidade = disponibilidade;
+        this.autor = autor;
     }
 
-    public LivroModel(Long id, String titulo, String autor, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade) {
+    public LivroModel(Long id, String titulo, Integer ano_publicacao, String isbn, Disponibilidade disponibilidade, AutorModel autor) {
         this.id = id;
         this.titulo = titulo;
-        this.autor = autor;
         this.ano_publicacao = ano_publicacao;
         this.isbn = isbn;
         this.disponibilidade = disponibilidade;
+        this.autor = autor;
     }
 
     public Long getId() {
@@ -51,14 +58,6 @@ public class LivroModel {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
     }
 
     public Integer getAno_publicacao() {
@@ -83,5 +82,13 @@ public class LivroModel {
 
     public void setDisponibilidade(Disponibilidade disponibilidade) {
         this.disponibilidade = disponibilidade;
+    }
+
+    public AutorModel getAutor() {
+        return autor;
+    }
+
+    public void setAutor(AutorModel autor) {
+        this.autor = autor;
     }
 }
